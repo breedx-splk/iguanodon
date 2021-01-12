@@ -1,4 +1,4 @@
-# iguanadon
+# iguanodon
 
 Measurement of otel agent overhead.
 
