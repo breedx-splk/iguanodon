@@ -45,14 +45,24 @@ export default function() {
     const pet3 = names.randomPet(petTypes, owner);
 
     const petsUrl = `${baseUri}/pets`;
-    const responses = http.batch([
+    const newPetResponses = http.batch([
         ["POST", petsUrl, JSON.stringify(pet1), { headers: { 'Content-Type': 'application/json' } } ],
         ["POST", petsUrl, JSON.stringify(pet2), { headers: { 'Content-Type': 'application/json' } } ],
         ["POST", petsUrl, JSON.stringify(pet3), { headers: { 'Content-Type': 'application/json' } } ],
     ]);
-    check(responses[0], { "pet status 201": r => r.status === 201});
-    check(responses[1], { "pet status 201": r => r.status === 201});
-    check(responses[2], { "pet status 201": r => r.status === 201});
+    check(newPetResponses[0], { "pet status 201": r => r.status === 201});
+    check(newPetResponses[1], { "pet status 201": r => r.status === 201});
+    check(newPetResponses[2], { "pet status 201": r => r.status === 201});
+
+    const responses = http.batch([
+        ["GET", `${baseUri}/pets/${JSON.parse(newPetResponses[0].body).id}`],
+        ["GET", `${baseUri}/pets/${JSON.parse(newPetResponses[1].body).id}`],
+        ["GET", `${baseUri}/pets/${JSON.parse(newPetResponses[2].body).id}`]
+    ]);
+    check(responses[0], { "pet exists 200": r => r.status === 200});
+    check(responses[1], { "pet exists 200": r => r.status === 200});
+    check(responses[2], { "pet exists 200": r => r.status === 200});
+
 
     //TODO: Set up a visit or two
     //TODO: Fetch out the owner again because their model has been updated.
