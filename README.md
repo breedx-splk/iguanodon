@@ -20,7 +20,7 @@ $ ./mvnw install
 $ brew install k6
 ```
 
-TBD: You should also stand up a locally runnig collector 
+TBD: You should also stand up a locally running collector 
 
 You can verify then that the app works by running:
 
@@ -42,6 +42,7 @@ tbd
 * clean out the database between runs
 * use a real/external database (mysql or pg via docker)
 * test each different exporter in isolation
+* with and without jdbc
 * gh-pages for results
 * automation (maybe nightly?)
 * collaboration
