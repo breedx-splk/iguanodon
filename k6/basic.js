@@ -2,23 +2,59 @@ import http from "k6/http";
 import { check } from "k6";
 import names from "./names.js";
 
+const baseUri = "http://localhost:9966/petclinic/api";
+
 export default function() {
 //    const url = "http://localhost:9966/petclinic/api/pettypes";
-    const baseUri = "http://localhost:9966/petclinic/api";
-    const url = `${baseUri}/specialties`;
-    const specialtiesResponse = http.get(url);
+    const specialtiesUrl = `${baseUri}/specialties`;
+    const specialtiesResponse = http.get(specialtiesUrl);
     const specialties = JSON.parse(specialtiesResponse.body);
 
+    // Add a new vet to the list
     const newVet = names.randomVet(specialties);
-    console.log(JSON.stringify(newVet));
     const response = http.post(`${baseUri}/vets`, JSON.stringify(newVet),
             { headers: { 'Content-Type': 'application/json' } });
+    // we don't guard against dupes, so this could fail on occasion
+    check(response, { "create vet status 201": (r) => r.status === 201 });
 
-    console.log(JSON.stringify(response))
-    let checkRes = check(response, {
-            "status is 201": (r) => r.status === 201
-        });
+    // make sure we can fetch that vet back out
+    const vetId = JSON.parse(response.body).id;
+    const vetUrl = `${baseUri}/vets/${vetId}`
+    const vetResponse = http.get(vetUrl);
+    check(vetResponse, { "fetch vet status 200": r => r.status === 200 });
 
-        // We reverse the check() result since we want to count the failures
-//    failureRate.add(!checkRes);
+    // add a new owner
+    const newOwner = names.randomOwner();
+    const newOwnerResponse = http.post(`${baseUri}/owners`, JSON.stringify(newOwner),
+          { headers: { 'Content-Type': 'application/json' } });
+    check(newOwnerResponse, { "new owner status 201": r => r.status === 201});
+
+    // make sure we can fetch that owner back out
+    const ownerId = JSON.parse(newOwnerResponse.body).id;
+    const ownerResponse = http.get(`${baseUri}/owners/${ownerId}`);
+    check(ownerResponse, { "fetch new owner status 200": r => r.status === 200});
+    const owner = JSON.parse(ownerResponse.body);
+
+    // get the list of all pet types
+    const petTypes = JSON.parse(http.get(`${baseUri}/pettypes`).body);
+    const owners = JSON.parse(http.get(`${baseUri}/owners`).body);
+
+    // create a 3 new random pets
+    const pet1 = names.randomPet(petTypes, owner);
+    const pet2 = names.randomPet(petTypes, owner);
+    const pet3 = names.randomPet(petTypes, owner);
+
+    const petsUrl = `${baseUri}/pets`;
+    const responses = http.batch([
+        ["POST", petsUrl, JSON.stringify(pet1), { headers: { 'Content-Type': 'application/json' } } ],
+        ["POST", petsUrl, JSON.stringify(pet2), { headers: { 'Content-Type': 'application/json' } } ],
+        ["POST", petsUrl, JSON.stringify(pet3), { headers: { 'Content-Type': 'application/json' } } ],
+    ]);
+    check(responses[0], { "pet status 201": r => r.status === 201});
+    check(responses[1], { "pet status 201": r => r.status === 201});
+    check(responses[2], { "pet status 201": r => r.status === 201});
+
+    //TODO: Set up a visit or two
+    //TODO: Fetch out the owner again because their model has been updated.
+
 };

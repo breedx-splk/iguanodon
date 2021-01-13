@@ -43,6 +43,15 @@ const firstNames = [
     "Kristopher", "Kyrie", "Ruben", "Ahmed", "Theodore"
 ];
 
+// $ curl https://raw.githubusercontent.com/rossgoodwin/american-names/master/surnames.json | jq | shuf | tail -25
+const surnames = [
+ "Coomes", "Kasputis", "Eing", "Budro", "Paszkiewicz", "Reichwald", "Mennona", "Esplin", "Trute", "Endlich",
+  "Kaman", "Coody", "Urish", "Styes", "Balles", "Semanek", "Tes", "Mediano", "Clave", "Beliard", "Christianson",
+  "Doy", "Bozman", "Waligura", "Templeman", "Gershenson", "Eckberg", "Harader", "Baurer", "Villao", "Decius",
+  "Marquardt", "Smaha", "Grzych", "Getto", "Wilberger", "Fleites", "Spoerl", "Oliger", "Gramza", "Prillaman",
+  "Beinlich", "Marzella", "Bota", "Arguilez", "Piotti", "Karri", "Spiropoulos", "Gambhir", "Franchak"
+];
+
 // source https://github.com/baliw/words/blob/master/adjectives.json
 const adj = ["Ablaze", "Abrupt", "Accomplished", "Active", "Adored", "Adulated", "Adventurous", "Affectionate", "Amused", "Amusing",
     "Animal-like", "Antique", "Appreciated", "Archaic", "Ardent", "Arrogant", "Astonished", "Audacious", "Authoritative",
@@ -53,7 +62,7 @@ const adj = ["Ablaze", "Abrupt", "Accomplished", "Active", "Adored", "Adulated",
     "Dramatic", "Drawn out", "Dripping", "Dumbstruck", "Ebullient", "Elated", "Elegant", "Enchanted", "Energetic",
     "Enthusiastic", "Ethereal", "Exaggerated", "Exalted", "Expectant", "Expressive", "Exuberant", "Faint", "Fantastical",
     "Favorable", "Febrile", "Feral", "Feverish", "Fiery", "Floating", "Flying", "Folksy", "Fond", "Forgiven", "Forgiving",
-    "Freakin' awesome", "Frenetic", "Frenzied", "Friendly. amorous", "From a distance", "Frosted", "Funny", "Furry",
+    "Freakin' awesome", "Frenetic", "Frenzied", "Friendly", "Amorous", "From a distance", "Frosted", "Funny", "Furry",
     "Galloping", "Gaping", "Gentle", "Giddy", "Glacial", "Gladness", "Gleaming", "Gleeful", "Gorgeous", "Graceful",
     "Grateful", "Halting", "Happy", "Haunting", "Heavenly", "Hidden", "High-spirited", "Honor", "Hopeful", "Hopping",
     "Humble", "Hushed", "Hypnotic", "Illuminated", "Immense", "Imperious", "Impudent", "In charge", "Inflated", "Innocent",
@@ -82,8 +91,7 @@ function rand(max){
     return Math.floor(Math.random() * Math.floor(max))
 }
 
-export default {
- randomVet: function(specialties) {
+function randomVet(specialties) {
     const first = randItem(firstNames);
     const last = randItem(adj);
     const numSpec = rand(specialties.length);
@@ -93,5 +101,47 @@ export default {
         lastName: last,
         specialties: spec
     };
+}
+
+function randomOwner(){
+    const firstName = randItem(firstNames);
+    const lastName = randItem(surnames);
+    return {
+     "firstName": firstName,
+     "lastName": lastName,
+     "address": `${rand(10000)} ${randItem(adj)} Ln.`,
+     "city": "Anytown",
+     "telephone": "8005551212",
+     "pets": []
+   };
+}
+
+function randomPet(types, owner) {
+    const birthDate = "2020/12/31";
+    const petName = ((rand(100) > 50) ? "" : `${randItem(adj)} `) + randItem(petNames);
+    const typeId = randItem(types).id;
+
+    return {
+     "birthDate": birthDate,
+     "id": 0, // one will be chosen for us
+     "name": petName,
+     "owner": {
+       "id": owner.id,
+       "firstName": null,
+       "lastName": "",
+       "address": "",
+       "city": "",
+       "telephone": ""
+     },
+     "type": {
+       "id": typeId
+     },
+     "visits": []
+   }
  }
+
+export default {
+ randomVet,
+ randomOwner,
+ randomPet
 };
