@@ -5,13 +5,13 @@
 MYDIR=`dirname $0`;
 LOGS="${MYDIR}/../logs"
 K6="${MYDIR}/../k6"
+RESULTS="${MYDIR}/.."
 PORT=9966
 
 function usage {
   echo "$0 <with-agent | no-agent>"
   exit 1
 }
-
 
 if [ "$1" == "no-agent" ] ; then
   SCRIPT="${MYDIR}/run-app-no-agent.sh"
@@ -25,6 +25,10 @@ fi
 # TODO: Please make me better!
 MYIP=$(ifconfig | grep inet | grep -v :: | grep -v 127 | awk '{print $2}' | head -1)
 echo $MYIP
+
+if [ ! -d "${LOGS}" ] ; then
+  mkdir "${LOGS}"
+fi
 
 ${SCRIPT} > ${LOGS}/app.log &
 
@@ -40,7 +44,7 @@ done
 
 sleep 2
 echo 'Running test'
-k6 run -u 5 -i 500 ${K6}/basic.js
+k6 run -u 5 -i 500 --out json=${RESULTS}/$1.json ${K6}/basic.js
 
 PID=$(jps | grep petclinic | awk '{print $1}')
 kill $PID
