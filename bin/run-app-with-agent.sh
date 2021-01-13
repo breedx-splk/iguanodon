@@ -20,4 +20,5 @@ java -javaagent:splunk-otel-javaagent.jar \
     -Dotel.resource.attributes=iguanodon-testing \
     -Dotel.exporter.otlp.endpoint=${MYIP}:${OTLP_PORT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
+    -XX:StartFlightRecording=dumponexit=true,name=with-agent,filename=${MYDIR}/../with-agent.jfr \
     -jar ${APPDIR}/target/spring-petclinic-rest-2.2.5.jar
