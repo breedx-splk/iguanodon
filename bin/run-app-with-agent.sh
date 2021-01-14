@@ -17,7 +17,13 @@ echo $MYIP
 # NOTE: JFR is not started at startup -- it is started after the app is healthy
 
 #    -Dotel.javaagent.debug=true \
-java -javaagent:splunk-otel-javaagent.jar \
+#    -Dotel.instrumentation.default-enabled=false \
+#    -Dotel.instrumentation.hibernate.enabled=false \
+#    -Dotel.instrumentation.jdbc.query.normalizer.enabled=false \
+#    -Dotel.instrumentation.jdbc.enabled=false \
+#java -javaagent:splunk-otel-javaagent.jar \
+java -javaagent:splunk-otel-javaagent-0.6.0-SNAPSHOT-all.jar \
+    -Dotel.instrumentation.jdbc.enabled=false \
     -Dotel.exporter=otlp \
     -Dotel.exporter.otlp.endpoint=${MYIP}:${OTLP_PORT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \

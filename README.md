@@ -1,6 +1,6 @@
 # iguanodon
 
-![iguanodon](doc/iguanadon.svg)
+![iguanodon](https://raw.githubusercontent.com/breedx-splk/iguanodon/main/doc/iguanodon.svg)
 
 Measurements of otel agent overhead.
 
@@ -87,10 +87,11 @@ For now, it is recommended to look at the output of k6. For very very basic manu
 consider the line that shows how long each iteration took.  This is a single pass through the k6 `basic.js`
 script.
 
-![iteration duration](doc/iteration_duration.png)
+![iteration duration](https://raw.githubusercontent.com/breedx-splk/iguanodon/main/doc/iteration_duration.png)
 
 Of particular interest are the first column (average) and last column (P95, or 95th percentile).
 You can use these two numbers to get a rough idea at how throughput was impacted.
+These numbers also exist in the summary output.
 
 * tbd how to interpret/read the data
 * tbd show how to load and look at jfr in jmc
