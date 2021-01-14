@@ -14,10 +14,11 @@ echo Running the petclinic app
 MYIP=$(ifconfig | grep inet | grep -v :: | grep -v 127 | awk '{print $2}' | head -1)
 echo $MYIP
 
+# NOTE: JFR is not started at startup -- it is started after the app is healthy
+
 #    -Dotel.javaagent.debug=true \
 java -javaagent:splunk-otel-javaagent.jar \
     -Dotel.exporter=otlp \
     -Dotel.exporter.otlp.endpoint=${MYIP}:${OTLP_PORT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
-    -XX:StartFlightRecording=dumponexit=true,name=with-agent,filename=${MYDIR}/../with-agent.jfr \
     -jar ${APPDIR}/target/spring-petclinic-rest-2.2.5.jar

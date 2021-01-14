@@ -14,12 +14,13 @@ function usage {
 }
 
 if [ "$1" == "no-agent" ] ; then
-  SCRIPT="${MYDIR}/run-app-no-agent.sh"
+  TEST_TYPE="no-agent"
 elif [ "$1" == "with-agent" ] ; then
-  SCRIPT="${MYDIR}/run-app-with-agent.sh"
+  TEST_TYPE="with-agent"
 else
   usage
 fi
+SCRIPT="${MYDIR}/run-app-${TEST_TYPE}.sh"
 
 # Find the local IP, in a way that is super clumsy and probably very custom to OSX and prone to breaking.
 # TODO: Please make me better!
@@ -42,9 +43,16 @@ while [ "1" == "1" ] ; do
   sleep 1
 done
 
+PID=$(jps | grep petclinic | awk '{print $1}')
+echo "App is ready, pid = ${PID}"
+
+echo 'Sleeping a bit...'
 sleep 2
+
+echo 'Starting JFR recording...'
+jcmd ${PID} JFR.start dumponexit=true name=${TEST_TYPE} filename=${MYDIR}/../${TEST_TYPE}.jfr
+
 echo 'Running test'
 k6 run -u 5 -i 500 --out json=${RESULTS}/$1.json ${K6}/basic.js
 
-PID=$(jps | grep petclinic | awk '{print $1}')
 kill $PID
