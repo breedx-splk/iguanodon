@@ -15,6 +15,7 @@ with and without the agent and perform some measurements:
 
 ```bash
 $ git submodule init
+$ git submodule update
 $ cd spring-petclinic-rest
 $ ./mvnw install
 $ brew install k6
