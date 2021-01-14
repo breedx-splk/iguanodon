@@ -7,6 +7,8 @@ LOGS="${MYDIR}/../logs"
 K6="${MYDIR}/../k6"
 RESULTS="${MYDIR}/.."
 PORT=9966
+VUSERS=5
+ITERATIONS=500
 
 function usage {
   echo "$0 <with-agent | no-agent>"
@@ -53,6 +55,6 @@ echo 'Starting JFR recording...'
 jcmd ${PID} JFR.start dumponexit=true name=${TEST_TYPE} filename=${MYDIR}/../${TEST_TYPE}.jfr
 
 echo 'Running test'
-k6 run -u 5 -i 500 --out json=${RESULTS}/$1.json ${K6}/basic.js
+k6 run -u ${VUSERS} -i ${ITERATIONS} --out json=${RESULTS}/$1.json ${K6}/basic.js
 
 kill $PID
