@@ -20,6 +20,8 @@ $ ./mvnw install
 $ brew install k6
 ```
 
+You should also install [JDK Mission Control](https://adoptopenjdk.net/jmc) if you don't already have it.
+
 To verify that java is working and things have built, 
 run the `spring-petclinic-rest` app:
 
