@@ -17,7 +17,6 @@ echo $MYIP
 #    -Dotel.javaagent.debug=true \
 java -javaagent:splunk-otel-javaagent.jar \
     -Dotel.exporter=otlp \
-    -Dotel.resource.attributes=iguanodon-testing \
     -Dotel.exporter.otlp.endpoint=${MYIP}:${OTLP_PORT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
     -XX:StartFlightRecording=dumponexit=true,name=with-agent,filename=${MYDIR}/../with-agent.jfr \
