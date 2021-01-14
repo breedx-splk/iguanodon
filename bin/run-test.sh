@@ -55,6 +55,20 @@ echo 'Starting JFR recording...'
 jcmd ${PID} JFR.start dumponexit=true name=${TEST_TYPE} filename=${MYDIR}/../${TEST_TYPE}.jfr
 
 echo 'Running test'
-k6 run -u ${VUSERS} -i ${ITERATIONS} --out json=${RESULTS}/$1.json ${K6}/basic.js
+SUMMARY_FILE=${RESULTS}/${TEST_TYPE}.json
+k6 run -u ${VUSERS} -i ${ITERATIONS} --summary-export=${SUMMARY_FILE} ${K6}/basic.js
 
+echo 'Stopping the petclinic app...'
 kill $PID
+
+if [ -f ${RESULTS}/with-agent.json ] && [ -f ${RESULTS}/no-agent.json ] ; then
+  NO_AVG=$(jq '.metrics | .iteration_duration | .avg' "${RESULTS}/no-agent.json")
+  NO_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' "${RESULTS}/no-agent.json")
+  WITH_AVG=$(jq '.metrics | .iteration_duration | .avg' "${RESULTS}/with-agent.json")
+  WITH_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' "${RESULTS}/with-agent.json")
+
+  echo "-------------------------------------------------------"
+  echo " No agent   : avg = ${NO_AVG} p95 = ${NO_P95}"
+  echo " With agent : avg = ${WITH_AVG} p95 = ${WITH_P95}"
+  echo "-------------------------------------------------------"
+fi

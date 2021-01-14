@@ -1,15 +1,18 @@
 # iguanodon
 
+![iguanodon](doc/iguanadon.svg)
+
 Measurements of otel agent overhead.
 
 # Description
 
 We run a [sample app](https://github.com/spring-petclinic/spring-petclinic-rest) 
-with and without the agent and perform some measurements:
+with and without the agent and perform some measurements. Goals ultimately
+include the desire to compare overhead of:
 
-* transaction throughput (TPM) P95
-* GC pauses (number and duration)
-* allocation rate
+* transaction throughput (TPM) - average and P95
+* GC pauses (number and total duration)
+* memory allocation rate
 
 # Setup
 
@@ -19,6 +22,7 @@ $ git submodule update
 $ cd spring-petclinic-rest
 $ ./mvnw install
 $ brew install k6
+$ brew install jq
 ```
 
 You should also install [JDK Mission Control](https://adoptopenjdk.net/jmc) if you don't already have it.
@@ -28,8 +32,7 @@ run the `spring-petclinic-rest` app:
 
 `java -jar target/spring-petclinic-rest-2.2.5.jar`
 
-and then point a browser at http://localhost:9966/petclinic/swagger-ui.html.
-
+and then point a browser at [http://localhost:9966/petclinic/swagger-ui.html](http://localhost:9966/petclinic/swagger-ui.html).
 
 ## Collector
 
@@ -51,7 +54,6 @@ docker run -it --rm \
 	--mem-ballast-size-mib=683
 ```
 
-
 # Running tests
 
 There is a script that runs a single pass test, either with or without the agent:
@@ -72,18 +74,33 @@ This script does the following:
 After a test run is complete, we have the following outputs:
 
 * no-agent.jfr - JFR recording data from the run without agent
-* no-agent.json - k6 output data from run without agent
+* no-agent.json - k6 summary output data from run without agent
 * with-agent.jfr - JFR recording data from the run with agent
-* with-agent.json - k6 output data from run with agent
+* with-agent.json - k6 summary output data from run with agent
 
 # Analysis
 
-tbd how to interpret/read the data
-tbd show how to load and look at jfr in jmc
+There is much to be done in this area!  Especially around automating runs and interpreting the 
+results. 
+
+For now, it is recommended to look at the output of k6. For very very basic manual inspection, 
+consider the line that shows how long each iteration took.  This is a single pass through the k6 `basic.js`
+script.
+
+![iteration duration](doc/iteration_duration.png)
+
+Of particular interest are the first column (average) and last column (P95, or 95th percentile).
+You can use these two numbers to get a rough idea at how throughput was impacted.
+
+* tbd how to interpret/read the data
+* tbd show how to load and look at jfr in jmc
+* tbd start building some comparison automation
 
 # Ideas / Future
 
 * use a real/external database (mysql or pg via docker)
+* be able to run with the agent and compare with/without options
+    * like with specific instrumentation en/disabled
 * test each different exporter in isolation
 * with and without jdbc
 * gh-pages for results
