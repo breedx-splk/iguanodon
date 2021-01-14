@@ -1,6 +1,6 @@
 # iguanodon
 
-![iguanodon](https://raw.githubusercontent.com/breedx-splk/iguanodon/main/doc/iguanodon.svg =250x250)
+<img src="https://raw.githubusercontent.com/breedx-splk/iguanodon/main/doc/iguanodon.svg" width="200" alt="iguanadon"/>
 
 Measurements of otel agent overhead.
 
