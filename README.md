@@ -99,11 +99,14 @@ These numbers also exist in the summary output.
 
 # Ideas / Future
 
+* take a heap dump after k6 runs.  could be useful to catch otel objects in flight.
 * use a real/external database (mysql or pg via docker)
 * be able to run with the agent and compare with/without options
     * like with specific instrumentation en/disabled
 * test each different exporter in isolation
 * with and without jdbc
+* use JFR profile named "profiler"?
+* compare/contrast with `e2ebenchmark` in the instrumentation repo
 * gh-pages for results
 * automation (maybe nightly?)
 * collaboration

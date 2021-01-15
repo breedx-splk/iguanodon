@@ -58,6 +58,10 @@ echo 'Running test'
 SUMMARY_FILE=${RESULTS}/${TEST_TYPE}.json
 k6 run -u ${VUSERS} -i ${ITERATIONS} --summary-export=${SUMMARY_FILE} ${K6}/basic.js
 
+HPROF="${RESULTS}/${TEST_TYPE}.hprof"
+echo "Taking a heap dump: ${HPROF}"
+jcmd ${PID} GC.heap_dump "${HPROF}"
+
 echo 'Stopping the petclinic app...'
 kill $PID
 
