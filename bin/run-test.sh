@@ -33,7 +33,7 @@ if [ ! -d "${LOGS}" ] ; then
   mkdir "${LOGS}"
 fi
 
-${SCRIPT} > ${LOGS}/app.log &
+${SCRIPT} > ${LOGS}/app.log 2>&1 &
 
 echo 'Waiting for app to be ready...'
 

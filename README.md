@@ -100,6 +100,7 @@ These numbers also exist in the summary output.
 # Ideas / Future
 
 * take a heap dump after k6 runs.  could be useful to catch otel objects in flight.
+* run with a more realistic -Xmx like 4G. 
 * use a real/external database (mysql or pg via docker)
 * be able to run with the agent and compare with/without options
     * like with specific instrumentation en/disabled
