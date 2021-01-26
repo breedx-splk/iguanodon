@@ -52,7 +52,7 @@ echo 'Sleeping a bit...'
 sleep 2
 
 echo 'Starting JFR recording...'
-jcmd ${PID} JFR.start dumponexit=true name=${TEST_TYPE} filename=${MYDIR}/../${TEST_TYPE}.jfr
+jcmd ${PID} JFR.start settings=profile dumponexit=true name=${TEST_TYPE} filename=${MYDIR}/../${TEST_TYPE}.jfr
 
 echo 'Running test'
 SUMMARY_FILE=${RESULTS}/${TEST_TYPE}.json
