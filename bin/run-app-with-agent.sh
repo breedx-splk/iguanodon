@@ -3,9 +3,36 @@
 MYDIR=`dirname $0`;
 APPDIR="${MYDIR}/../spring-petclinic-rest"
 OTLP_PORT=55680
+SPLUNK_AGENT_URL="https://github.com/signalfx/splunk-otel-java/releases/latest/download/splunk-otel-javaagent-all.jar"
+OTEL_AGENT_URL="https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent-all.jar"
 
-curl -C - -L https://github.com/signalfx/splunk-otel-java/releases/latest/download/splunk-otel-javaagent-all.jar \
-    -o splunk-otel-javaagent.jar
+function usage {
+  echo "$0 --agent [otel|splunk]"
+}
+
+while [[ $# -gt 0 ]] ; do
+  key="$1"
+  case $key in
+      -a|--extension)
+      AGENT="$2"
+      shift # past argument
+      shift # past value
+  esac
+done
+
+if [ "$AGENT" == "otel" ] ; then
+  URL="$OTEL_AGENT_URL"
+  AGENT_JAR="opentelemetry-javaagent-all.jar"
+elif [ "$AGENT" == "splunk" ] ; then
+  URL="$SPLUNK_AGENT_URL"
+  AGENT_JAR="splunk-otel-javaagent.jar"
+else
+    usage
+    exit 1
+fi
+
+
+curl -C - -L "${URL}" -o "${AGENT_JAR}"
 
 echo Running the petclinic app
 
@@ -16,14 +43,10 @@ echo $MYIP
 
 # NOTE: JFR is not started at startup -- it is started after the app is healthy
 
-#    -Dotel.javaagent.debug=true \
-#    -Dotel.instrumentation.default-enabled=false \
-#    -Dotel.instrumentation.hibernate.enabled=false \
-#    -Dotel.instrumentation.jdbc.query.normalizer.enabled=false \
-#java -javaagent:splunk-otel-javaagent-0.6.0-SNAPSHOT-all.jar \
-#    -Dotel.instrumentation.jdbc.enabled=false \
-java -javaagent:splunk-otel-javaagent.jar \
-    -Dotel.exporter=otlp \
-    -Dotel.exporter.otlp.endpoint=${MYIP}:${OTLP_PORT} \
+java -javaagent:$AGENT_JAR \
+    -Dotel.traces.exporter=otlp \
+    -Dotel.imr.export.interval=5000 \
+    -Dotel.exporter.otlp.insecure=true \
+    -Dotel.exporter.otlp.endpoint=http://${MYIP}:${OTLP_PORT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
     -jar ${APPDIR}/target/spring-petclinic-rest-2.2.5.jar
