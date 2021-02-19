@@ -34,6 +34,16 @@ run the `spring-petclinic-rest` app:
 
 and then point a browser at [http://localhost:9966/petclinic/swagger-ui.html](http://localhost:9966/petclinic/swagger-ui.html).
 
+# Docker
+
+WIP/TBD:
+
+```
+$ docker build -f Dockerfile-petclinic -t petclinic-rest-with-agent .
+$ docker run -it --rm petclinic-rest-with-agent -a otel --endpoint http://localhost:55680
+
+```
+
 ## Collector
 
 Some tests run with an agent-instrumented application, and the otel
