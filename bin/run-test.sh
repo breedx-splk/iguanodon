@@ -9,20 +9,58 @@ RESULTS="${MYDIR}/.."
 PORT=9966
 VUSERS=5
 ITERATIONS=500
+TS=$(date +%Y%m%d%H%M%S)
 
 function usage {
-  echo "$0 <with-agent | no-agent>"
+  echo
+  echo "$0 <options>"
+  echo
+  echo "   --no-agent              : run without the agent"
+  echo "   --agent <otel|splunk>   : run with one of the agents"
+  echo "   --users <vusers>        : use this many vusers (default=5)"
+  echo "   --iterations <num>      : run this many iterations (default=500)"
+  echo
   exit 1
 }
 
-if [ "$1" == "no-agent" ] ; then
-  TEST_TYPE="no-agent"
-elif [ "$1" == "with-agent" ] ; then
-  TEST_TYPE="with-agent"
+while [[ $# -gt 0 ]] ; do
+  key="$1"
+  case $key in
+    -a|--agent)
+      TEST_TYPE="with-agent"
+      AGENT=$2
+      shift # past argument
+      shift # past value
+      ;;
+    -n|--no-agent)
+      TEST_TYPE="no-agent"
+      shift # past argument
+      ;;
+    -u|--users)
+      VUSERS=$2
+      shift
+      shift
+      ;;
+    -i|--iterations)
+      ITERATIONS=$2
+      shift
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
+if [ "$TEST_TYPE" == "no-agent" ] ; then
+  SCRIPT="${MYDIR}/run-app-${TEST_TYPE}.sh"
+elif [ "$TEST_TYPE" == "with-agent" ]; then
+  SCRIPT="${MYDIR}/run-app-${TEST_TYPE}.sh -a ${AGENT}"
 else
   usage
+  exit 1
 fi
-SCRIPT="${MYDIR}/run-app-${TEST_TYPE}.sh"
+
 
 # Find the local IP, in a way that is super clumsy and probably very custom to OSX and prone to breaking.
 # TODO: Please make me better!
@@ -33,6 +71,7 @@ if [ ! -d "${LOGS}" ] ; then
   mkdir "${LOGS}"
 fi
 
+echo $SCRIPT
 ${SCRIPT} > ${LOGS}/app.log 2>&1 &
 
 echo 'Waiting for app to be ready...'
