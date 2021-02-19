@@ -96,6 +96,8 @@ jcmd ${PID} JFR.start settings=profile dumponexit=true name=${TEST_TYPE} filenam
 echo 'Running test'
 SUMMARY_FILE=${RESULTS}/${TEST_TYPE}.json
 k6 run -u ${VUSERS} -i ${ITERATIONS} --summary-export=${SUMMARY_FILE} ${K6}/basic.js
+# copy to a timestamped version of the results
+cp ${SUMMARY_FILE} "${RESULTS}/${TEST_TYPE}-${TS}.json"
 
 HPROF="${RESULTS}/${TEST_TYPE}.hprof"
 echo "Taking a heap dump: ${HPROF}"
