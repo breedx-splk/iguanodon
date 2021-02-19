@@ -7,7 +7,11 @@ SPLUNK_AGENT_URL="https://github.com/signalfx/splunk-otel-java/releases/latest/d
 OTEL_AGENT_URL="https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent-all.jar"
 
 function usage {
-  echo "$0 --agent [otel|splunk]"
+  echo
+  echo "$0 <options> "
+  echo "  --agent [otel|splunk] : specify the agent to use"
+  echo "  --endpoint [url]      : specify otlp endpoint url"
+  echo
 }
 
 while [[ $# -gt 0 ]] ; do
@@ -17,6 +21,11 @@ while [[ $# -gt 0 ]] ; do
       AGENT="$2"
       shift # past argument
       shift # past value
+      ;;
+    -e|--endpoint)
+      ENDPOINT="$2"
+      shift
+      shift
       ;;
     *)
       shift
@@ -35,15 +44,20 @@ else
     exit 1
 fi
 
-
+echo "Downloading the latest ${AGENT} agent jar"
 curl -C - -L "${URL}" -o "${AGENT_JAR}"
 
 echo Running the petclinic app
 
-# Find the local IP, in a way that is super clumsy and probably very custom to OSX and prone to breaking.
-# TODO: Please make me better!
-MYIP=$(ifconfig | grep inet | grep -v :: | grep -v 127 | awk '{print $2}' | head -1)
-echo $MYIP
+if [ "${ENDPOINT}" == "" ] ; then
+  echo WARNING:::: guessing that OTLP is on localhost, trying to find my IP
+  # Find the local IP, in a way that is super clumsy and probably very custom to OSX and prone to breaking.
+  # TODO: Please make me better!
+  MYIP=$(ifconfig | grep inet | grep -v :: | grep -v 127 | awk '{print $2}' | head -1)
+  echo $MYIP
+  ENDPOINT="http://${MYIP}:${OTLP_PORT}"
+  echo $ENDPOINT
+fi
 
 # NOTE: JFR is not started at startup -- it is started after the app is healthy
 
@@ -51,6 +65,6 @@ java -javaagent:$AGENT_JAR \
     -Dotel.traces.exporter=otlp \
     -Dotel.imr.export.interval=5000 \
     -Dotel.exporter.otlp.insecure=true \
-    -Dotel.exporter.otlp.endpoint=http://${MYIP}:${OTLP_PORT} \
+    -Dotel.exporter.otlp.endpoint=${ENDPOINT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
     -jar ${APPDIR}/target/spring-petclinic-rest-2.2.5.jar
