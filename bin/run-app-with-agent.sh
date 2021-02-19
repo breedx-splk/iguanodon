@@ -13,10 +13,14 @@ function usage {
 while [[ $# -gt 0 ]] ; do
   key="$1"
   case $key in
-      -a|--extension)
+    -a|--agent)
       AGENT="$2"
       shift # past argument
       shift # past value
+      ;;
+    *)
+      shift
+      ;;
   esac
 done
 
