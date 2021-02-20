@@ -17,6 +17,7 @@ extensions:
     endpoint: :55679
 
 service:
+  extensions: [health_check]
   pipelines:
     traces:
       receivers: [otlp]

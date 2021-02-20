@@ -40,11 +40,15 @@ WIP/TBD:
 
 ```
 $ docker build -f Dockerfile-petclinic -t petclinic-rest-with-agent .
-$ docker run -it --rm -p 9966:9966 petclinic-rest-with-agent -a otel --endpoint http://localhost:55680
+$ docker build -f Dockerfile-testrunner -t iguanodon-testrunner .
 
 # Collector:
 $ docker run -it --rm -v /Users/jplumb/code/iguanodon/collector/otel-collector-config.yaml:/etc/collector.yaml:ro \
   --name otelcol -p 4317:4317  otel/opentelemetry-collector-dev:latest --config /etc/collector.yaml
+# Test app (petclinic rest):
+$ docker run -it --rm -p 9966:9966 petclinic-rest-with-agent -a otel --endpoint http://localhost:55680
+
+
 ```
 
 ## Collector
