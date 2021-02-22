@@ -1,5 +1,12 @@
 FROM adoptopenjdk:11-jdk
 
+RUN apt update
+RUN apt install -y openssh-server
+RUN sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# TODO: add a user that can log in and has root privs
+# Can crib from https://github.com/vertigobr/tiny-sshd/blob/master/Dockerfile
+
 COPY spring-petclinic-rest/ /app/spring-petclinic-rest/
 COPY bin/ /app/bin/
 
