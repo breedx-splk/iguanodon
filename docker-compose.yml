@@ -1,9 +1,10 @@
 version: "3.9"
 services:
 
-  # collector
   collector:
-    image: otel/opentelemetry-collector-dev:latest
+    build:
+      context: ./collector
+      dockerfile: Dockerfile
     ports:
       - "4317:4317"
       - "13133:13133"
@@ -12,8 +13,14 @@ services:
     command: [ "--config=/etc/collector.yaml" ]
 
   petclinic:
-    image: petclinic-rest-with-agent
+    build:
+      context: .
+      dockerfile: Dockerfile-petclinic
     ports:
+      - "2022:22"
       - "9966:9966"
     command: [ "-a", "otel", "--endpoint", "http://collector:4317" ]
+
+#  testrunner:
+#    image: debian/stable
 

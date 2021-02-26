@@ -1,8 +1,13 @@
 FROM adoptopenjdk:11-jdk
 
-RUN apt update
-RUN apt install -y openssh-server
-RUN sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+RUN apt update && \
+    apt install -y openssh-server sudo && \
+    mkdir /run/sshd && \
+    sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#PermitEmptyPasswords.*/PermitEmptyPasswords yes/' /etc/ssh/sshd_config && \
+    useradd -m -d /home/remote -s /bin/bash -u 5001 remote && \
+    passwd -d remote && \
+    echo "%remote ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # TODO: add a user that can log in and has root privs
 # Can crib from https://github.com/vertigobr/tiny-sshd/blob/master/Dockerfile
@@ -12,9 +17,10 @@ COPY bin/ /app/bin/
 
 WORKDIR /app/spring-petclinic-rest
 
-RUN ./mvnw install
+RUN ./mvnw package -Dmaven.test.skip=true
 
 WORKDIR /app
 EXPOSE 9966
 
-ENTRYPOINT ["bin/run-app-with-agent.sh"]
+ENTRYPOINT ["/usr/sbin/sshd", "-D", "-e"]
+# start && bin/run-app-with-agent.sh"]
