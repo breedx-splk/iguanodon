@@ -2,7 +2,8 @@ import http from "k6/http";
 import { check } from "k6";
 import names from "./names.js";
 
-const baseUri = "http://localhost:9966/petclinic/api";
+const host = __ENV.TARGET_HOST || 'localhost';
+const baseUri = `http://${host}:9966/petclinic/api`;
 
 export default function() {
 //    const url = "http://localhost:9966/petclinic/api/pettypes";
