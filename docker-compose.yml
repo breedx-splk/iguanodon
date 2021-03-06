@@ -19,8 +19,12 @@ services:
     ports:
       - "2022:22"
       - "9966:9966"
-    command: [ "-a", "otel", "--endpoint", "http://collector:4317" ]
+#    command: [ "/usr/bin/sshd", "-D", "-e" ]
+#    command: [ "-a", "otel", "--endpoint", "http://collector:4317" ]
 
-#  testrunner:
-#    image: debian/stable
+  testrunner:
+    build:
+      context: .
+      dockerfile: Dockerfile-testrunner
+    command: ["/app/bin/run-remote-sequence.sh"]
 

@@ -1,12 +1,13 @@
 FROM debian:stable
 
 RUN apt-get update
-RUN apt-get install -y gnupg ca-certificates
+RUN apt-get install -y gnupg ca-certificates curl openssh-client
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
 RUN echo "deb https://dl.bintray.com/loadimpact/deb stable main" | tee -a /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get install k6
 
 COPY bin/ /app/bin/
+COPY k6/ /app/k6/
 
 WORKDIR /app
