@@ -9,7 +9,6 @@ RESULTS="/app"
 PORT=9966
 VUSERS=5
 ITERATIONS=500
-TS=$(date +%Y%m%d%H%M%S)
 
 function usage {
   echo
@@ -95,8 +94,6 @@ ssh -o StrictHostKeyChecking=no remote@petclinic "jcmd ${PID} JFR.start settings
 echo 'Running test'
 SUMMARY_FILE=${RESULTS}/${TEST_TYPE}.json
 TARGET_HOST=petclinic k6 run -u ${VUSERS} -i ${ITERATIONS} --summary-export=${SUMMARY_FILE} ${K6}/basic.js
-# copy to a timestamped version of the results
-cp ${SUMMARY_FILE} "${RESULTS}/${TEST_TYPE}-${TS}.json"
 
 # Commenting this out until we can decide _how_ we wanna automatically analyze the heap
 #HPROF="${RESULTS}/${TEST_TYPE}.hprof"
