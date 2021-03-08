@@ -21,7 +21,19 @@ NO_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' no-agent.json)
 WITH_AVG=$(jq '.metrics | .iteration_duration | .avg' with-agent.json)
 WITH_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' with-agent.json)
 
+# total GC time:
+GC_WITH=$(jfr print --json --events "jdk.G1GarbageCollection" with-agent.jfr | \
+  jq '[.recording.events | .[].values.duration | .[2:] | .[:-1] | tonumber] | add')
+
+GC_WITHOUT=$(jfr print --json --events "jdk.G1GarbageCollection" no-agent.jfr | \
+  jq '[.recording.events | .[].values.duration | .[2:] | .[:-1] | tonumber] | add')
+
+
 echo "-------------------------------------------------------"
 echo " No agent   : iter duration: avg = ${NO_AVG} p95 = ${NO_P95}"
 echo " With agent : iter duration: avg = ${WITH_AVG} p95 = ${WITH_P95}"
 echo "-------------------------------------------------------"
+echo " No agent   : total gc: ${GC_WITHOUT}"
+echo " With agent : total gc: ${GC_WITH}"
+echo "-------------------------------------------------------"
+

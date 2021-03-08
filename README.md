@@ -30,7 +30,7 @@ You should also install [JDK Mission Control](https://adoptopenjdk.net/jmc) if y
 To verify that java is working and things have built, 
 run the `spring-petclinic-rest` app:
 
-`java -jar target/spring-petclinic-rest-2.2.5.jar`
+`java -jar target/spring-petclinic-rest-2.4.2.jar`
 
 and then point a browser at [http://localhost:9966/petclinic/swagger-ui.html](http://localhost:9966/petclinic/swagger-ui.html).
 

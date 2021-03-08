@@ -67,4 +67,4 @@ java -javaagent:$AGENT_JAR \
     -Dotel.exporter.otlp.insecure=true \
     -Dotel.exporter.otlp.endpoint=${ENDPOINT} \
     -Dotel.resource.attributes=service.name=iguanodon-petclinic \
-    -jar ${APPDIR}/target/spring-petclinic-rest-2.2.5.jar
+    -jar ${APPDIR}/target/spring-petclinic-rest-2.4.2.jar
