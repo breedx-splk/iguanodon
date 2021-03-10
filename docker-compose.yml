@@ -26,5 +26,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-testrunner
+    volumes:
+      - ./results:/app/results
     command: ["/app/bin/run-remote-sequence.sh"]
 

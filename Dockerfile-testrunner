@@ -9,5 +9,6 @@ RUN apt-get install k6
 
 COPY bin/ /app/bin/
 COPY k6/ /app/k6/
+RUN mkdir /app/results
 
 WORKDIR /app
