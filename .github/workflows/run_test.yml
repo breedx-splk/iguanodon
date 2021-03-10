@@ -12,3 +12,9 @@ jobs:
         run: docker-compose build
       - name: run-test
         run: docker-compose up --exit-code-from testrunner
+      - name: publish-results
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./results
+          destination_dir: results
