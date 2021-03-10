@@ -28,8 +28,11 @@ GC_WITH=$(jfr print --json --events "jdk.G1GarbageCollection" with-agent.jfr | \
 GC_WITHOUT=$(jfr print --json --events "jdk.G1GarbageCollection" no-agent.jfr | \
   jq '[.recording.events | .[].values.duration | .[2:] | .[:-1] | tonumber] | add')
 
-cp no-agent.jfr results
-cp with-agent.jfr results
+cp no-agent.jfr results/${TS}-no-agent.jfr
+cp with-agent.jfr results/${TS}-with-agent.jfr
+
+cp no-agent.json results/${TS]-no-agent.json}
+cp with-agent.json results/${TS}-with-agent.json
 
 echo "-------------------------------------------------------"
 echo " No agent   : iter duration: avg = ${NO_AVG} p95 = ${NO_P95}"
