@@ -101,4 +101,6 @@ TARGET_HOST=petclinic k6 run -u ${VUSERS} -i ${ITERATIONS} --summary-export=${SU
 #ssh -o StrictHostKeyChecking=no remote@petclinic "jcmd ${PID} GC.heap_dump ${HPROF}"
 
 echo 'Stopping the petclinic app...'
-ssh -o StrictHostKeyChecking=no remote@petclinic "kill $PID"
+ssh -o StrictHostKeyChecking=no remote@petclinic "kill -15 $PID"
+ssh -o StrictHostKeyChecking=no remote@petclinic "while kill -0 $PID; do sleep 1; done"
+sleep 1
