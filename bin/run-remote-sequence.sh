@@ -16,10 +16,15 @@ scp -o StrictHostKeyChecking=no remote@petclinic:/app/with-agent.jfr with-agent.
 
 ls -ltr
 
-NO_AVG=$(jq '.metrics | .iteration_duration | .avg' no-agent.json)
-NO_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' no-agent.json)
-WITH_AVG=$(jq '.metrics | .iteration_duration | .avg' with-agent.json)
-WITH_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' with-agent.json)
+NO_ITER_AVG=$(jq '.metrics | .iteration_duration | .avg' no-agent.json)
+NO_ITER_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' no-agent.json)
+NO_HTTP_AVG=$(jq '.metrics | .http_req_duration | .avg' no-agent.json)
+NO_HTTP_P95=$(jq '.metrics | .http_req_duration | ."p(95)"' no-agent.json)
+
+WITH_ITER_AVG=$(jq '.metrics | .iteration_duration | .avg' with-agent.json)
+WITH_ITER_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' with-agent.json)
+WITH_HTTP_AVG=$(jq '.metrics | .http_req_duration | .avg' with-agent.json)
+WITH_HTTP_P95=$(jq '.metrics | .http_req_duration | ."p(95)"' with-agent.json)
 
 # total GC time:
 GC_WITH=$(jfr print --json --events "jdk.G1GarbageCollection" with-agent.jfr | \
@@ -28,16 +33,36 @@ GC_WITH=$(jfr print --json --events "jdk.G1GarbageCollection" with-agent.jfr | \
 GC_WITHOUT=$(jfr print --json --events "jdk.G1GarbageCollection" no-agent.jfr | \
   jq '[.recording.events | .[].values.duration | .[2:] | .[:-1] | tonumber] | add')
 
-cp no-agent.jfr results/${TS}-no-agent.jfr
-cp with-agent.jfr results/${TS}-with-agent.jfr
-
-cp no-agent.json results/${TS]-no-agent.json}
-cp with-agent.json results/${TS}-with-agent.json
-
 echo "-------------------------------------------------------"
-echo " No agent   : iter duration: avg = ${NO_AVG} p95 = ${NO_P95}"
-echo " With agent : iter duration: avg = ${WITH_AVG} p95 = ${WITH_P95}"
+echo " No agent   : iter duration: avg = ${NO_ITER_AVG} p95 = ${NO_ITER_P95}"
+echo " With agent : iter duration: avg = ${WITH_ITER_AVG} p95 = ${WITH_ITER_P95}"
 echo "-------------------------------------------------------"
 echo " No agent   : total gc: ${GC_WITHOUT}"
 echo " With agent : total gc: ${GC_WITH}"
 echo "-------------------------------------------------------"
+
+NO_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics results/no-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
+NO_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary results/no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
+NO_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary results/no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
+
+WITH_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics results/with-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
+WITH_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary results/with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
+WITH_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary results/with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
+
+NO_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate results/no-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
+WITH_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate results/with-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
+
+echo "${TS},${NO_ITER_AVG},${NO_ITER_P95},${NO_HTTP_AVG},${NO_HTTP_P95},${WITH_ITER_AVG},${WITH_ITER_P95},${WITH_HTTP_AVG},${WITH_HTTP_P95}" >> results/throughput.csv
+echo "${TS},${NO_ALLOCS},${WITH_ALLOCS}" >> results/allocations.csv
+echo "${TS},${GC_WITHOUT},${GC_WITH}" >> results/garbage_collection.csv
+echo "${TS},${NO_HEAP_MIN},${NO_HEAP_MAX},${WITH_HEAP_MIN},${WITH_HEAP_MAX}" >> results/heap_used.csv
+echo "${TS},${NO_TS_RATE},${WITH_TS_RATE}" >> results/thread_context_switch_rate.csv
+
+jfr print --json \
+  --events jdk.ThreadAllocationStatistics,jdk.GCHeapSummary,jdk.ThreadContextSwitchRate,jdk.G1GarbageCollection \
+  with-agent.jfr > results/${TS}.with-agent.json
+
+jfr print --json \
+  --events jdk.ThreadAllocationStatistics,jdk.GCHeapSummary,jdk.ThreadContextSwitchRate,jdk.G1GarbageCollection \
+  no-agent.jfr > results/${TS}.no-agent.json
+

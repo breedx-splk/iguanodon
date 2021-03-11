@@ -19,8 +19,6 @@ services:
     ports:
       - "2022:22"
       - "9966:9966"
-#    command: [ "/usr/bin/sshd", "-D", "-e" ]
-#    command: [ "-a", "otel", "--endpoint", "http://collector:4317" ]
 
   testrunner:
     build:
