@@ -2,6 +2,8 @@
 
 # Runs the test pass without agent, gathers results, then again with agent, and gathers results.
 
+set -e
+
 TS=$(date +%Y%m%d%H%M%S)
 
 /app/bin/run-test-remote.sh --no-agent
@@ -41,16 +43,16 @@ echo " No agent   : total gc: ${GC_WITHOUT}"
 echo " With agent : total gc: ${GC_WITH}"
 echo "-------------------------------------------------------"
 
-NO_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics results/no-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
-NO_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary results/no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
-NO_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary results/no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
+NO_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics no-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
+NO_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
+NO_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary no-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
 
-WITH_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics results/with-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
-WITH_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary results/with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
-WITH_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary results/with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
+WITH_ALLOCS=$(jfr print --json --events jdk.ThreadAllocationStatistics with-agent.jfr | jq '[.recording.events | .[].values.allocated] | add')
+WITH_HEAP_MIN=$(jfr print --json --events jdk.GCHeapSummary with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | min')
+WITH_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary with-agent.jfr | jq '[.recording.events | .[].values.heapUsed ] | max')
 
-NO_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate results/no-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
-WITH_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate results/with-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
+NO_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate no-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
+WITH_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate with-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
 
 echo "${TS},${NO_ITER_AVG},${NO_ITER_P95},${NO_HTTP_AVG},${NO_HTTP_P95},${WITH_ITER_AVG},${WITH_ITER_P95},${WITH_HTTP_AVG},${WITH_HTTP_P95}" >> results/throughput.csv
 echo "${TS},${NO_ALLOCS},${WITH_ALLOCS}" >> results/allocations.csv
