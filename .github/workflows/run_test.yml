@@ -12,6 +12,8 @@ jobs:
         run: docker-compose build
       - name: run-test-in-docker-compose
         run: docker-compose up --exit-code-from testrunner
+      - name: look for results
+        run: ls -l results
       - name: publish-results
         uses: peaceiris/actions-gh-pages@v3
         with:
