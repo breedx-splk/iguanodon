@@ -10,11 +10,13 @@ jobs:
         uses: textbook/git-checkout-submodule-action@master
       - name: docker-build
         run: docker-compose -f docker-compose-quicktest.yml build
-      - name: run-test-in-docker-compose
+      - name: test from container
         run: docker-compose -f docker-compose-quicktest.yml up --exit-code-from testrunner
       - name: afterstep
         run: ls -l results
       - name: afterstep2
         run: ls -l web/results
       - name: afterstep3
+        run: ls -l
+      - name: afterstep4
         run: ls -l /github/workspace
