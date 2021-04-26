@@ -3,14 +3,16 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      options: -v /__w/iguanodon/results:/app/results:rw
     steps:
       - name: checkout
         uses: actions/checkout@v2
       - name: checkout submodules
         uses: textbook/git-checkout-submodule-action@master
-      - name: build
+      - name: docker-build
         run: docker-compose build
-      - name: run-test
+      - name: run-test-in-docker-compose
         run: docker-compose up --exit-code-from testrunner
       - name: publish-results
         uses: peaceiris/actions-gh-pages@v3
