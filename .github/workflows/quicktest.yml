@@ -18,5 +18,7 @@ jobs:
         run: ls -l web/results
       - name: afterstep3
         run: ls -l
+      - name: afterstep3.5
+        run: ls -l results/
       - name: afterstep4
         run: ls -l /github/workspace
