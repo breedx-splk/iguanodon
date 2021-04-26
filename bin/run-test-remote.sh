@@ -69,6 +69,7 @@ sleep 2
 
 echo $SCRIPT
 ssh -o StrictHostKeyChecking=no remote@petclinic "${SCRIPT} > ${LOGS}/app.log 2>&1 &"
+SECONDS=0
 
 echo 'Waiting for app to be ready...'
 
@@ -80,6 +81,7 @@ while [ "1" == "1" ] ; do
   echo 'Waiting for app to be ready...'
   sleep 1
 done
+echo $SECONDS > "results/${TEST_TYPE}.startup.seconds"
 
 PID=$(ssh -o StrictHostKeyChecking=no remote@petclinic "jps | grep petclinic | awk '{print \$1}'" | tail -1)
 

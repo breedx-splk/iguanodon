@@ -68,3 +68,11 @@ jfr print --json \
   --events jdk.ThreadAllocationStatistics,jdk.GCHeapSummary,jdk.ThreadContextSwitchRate,jdk.G1GarbageCollection \
   no-agent.jfr > results/${TS}.no-agent.json
 
+NO_AGENT_STARTUP=$(cat results/no-agent.startup.seconds)
+AGENT_STARTUP=$(cat results/with-agent.startup.seconds)
+rm results/no-agent.startup.seconds
+rm results/with-agent.startup.seconds
+
+echo "${TS},${NO_AGENT_STARTUP},${AGENT_STARTUP}" >> results/start_time.csv
+
+ls -ltr results
