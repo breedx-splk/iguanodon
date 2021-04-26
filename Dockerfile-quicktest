@@ -1,0 +1,6 @@
+FROM debian:stable
+
+COPY bin/ /app/bin/
+RUN mkdir /app/results
+
+WORKDIR /app
