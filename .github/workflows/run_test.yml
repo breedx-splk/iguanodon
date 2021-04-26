@@ -3,9 +3,6 @@ on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:latest
-      options: -v /__w/iguanodon/iguanodon/results:/app/results:rw
     steps:
       - name: checkout
         uses: actions/checkout@v2
