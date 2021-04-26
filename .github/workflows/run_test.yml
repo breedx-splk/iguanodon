@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:latest
-      options: -v /__w/iguanodon/results:/app/results:rw
+      options: -v /__w/iguanodon/iguanodon/results:/app/results:rw
     steps:
       - name: checkout
         uses: actions/checkout@v2

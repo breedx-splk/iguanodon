@@ -4,4 +4,6 @@ logs
 *.iml
 .idea
 *.jfr
-results
+results/*.csv
+results/*.json
+results/*.jfr
