@@ -4,6 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
+      image: ubuntu:latest
       options: -v /__w/iguanodon/results:/app/results:rw
     steps:
       - name: checkout
