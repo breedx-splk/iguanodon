@@ -1,0 +1,28 @@
+FROM adoptopenjdk:11-jdk
+
+RUN apt update && \
+    apt install -y openssh-server sudo && \
+    mkdir /run/sshd && \
+    sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#PermitUserEnvironment.*/PermitUserEnvironment yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#PermitEmptyPasswords.*/PermitEmptyPasswords yes/' /etc/ssh/sshd_config && \
+    sed -i 's/secure_path="/secure_path="\/opt\/java\/openjdk\/bin:/' /etc/sudoers && \
+    sed -i 's/PATH="/PATH="\/opt\/java\/openjdk\/bin:/' /etc/environment && \
+    useradd -m -d /app -s /bin/bash -u 5001 remote && \
+    passwd -d remote && \
+    mkdir -p /app/.ssh && chmod 700 /app/.ssh && \
+    ln -s /etc/environment /app/.ssh/environment && \
+    echo "%remote ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+COPY spring-petclinic-rest/ /app/spring-petclinic-rest/
+
+WORKDIR /app/spring-petclinic-rest
+
+RUN ./mvnw package -Dmaven.test.skip=true
+
+COPY bin/ /app/bin/
+
+WORKDIR /app
+EXPOSE 9966
+EXPOSE 22
+
