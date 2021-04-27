@@ -16,8 +16,7 @@ scp -o StrictHostKeyChecking=no remote@petclinic:/app/no-agent.jfr no-agent.jfr
 echo Fetching results...
 scp -o StrictHostKeyChecking=no remote@petclinic:/app/with-agent.jfr with-agent.jfr
 
-ls -ltr results
-cat results/allocations.csv
+rsync -avv --progress /github/workspace/results/ results/
 
 NO_ITER_AVG=$(jq '.metrics | .iteration_duration | .avg' no-agent.json)
 NO_ITER_P95=$(jq '.metrics | .iteration_duration | ."p(95)"' no-agent.json)
@@ -77,8 +76,8 @@ rm results/with-agent.startup.seconds
 echo "${TS},${NO_AGENT_STARTUP},${AGENT_STARTUP}" >> results/start_time.csv
 
 #ls -ltr /github/workspace/
-ls -ltr results
-cat results/allocations.csv
+#ls -ltr results
+#cat results/allocations.csv
 
 echo Cleaning up...
 rm results/*.no-agent.json results/*.with-agent.json

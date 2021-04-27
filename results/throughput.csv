@@ -1,1 +1,1 @@
-20210427163734,513.7405803059992,669.39358075,39.85835661092313,372.1890731499998,571.3656455239999,797.9972420999999,44.55202020184617,419.1163143999997
+time,iteration-avg-no-agent,iteration-p95-no-agent,http-req-avg-no-agent,http-req-p95-no-agent,iteration-avg-with-agent,iteration-p95-with-agent,http-req-avg-with-agent,http-req-p95-with-agent
