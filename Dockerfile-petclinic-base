@@ -20,9 +20,3 @@ WORKDIR /app/spring-petclinic-rest
 
 RUN ./mvnw package -Dmaven.test.skip=true
 
-COPY bin/ /app/bin/
-
-WORKDIR /app
-EXPOSE 9966
-EXPOSE 22
-
