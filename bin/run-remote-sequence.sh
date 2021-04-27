@@ -75,7 +75,12 @@ rm results/with-agent.startup.seconds
 
 echo "${TS},${NO_AGENT_STARTUP},${AGENT_STARTUP}" >> results/start_time.csv
 
-ls -ltr results
-ls -ltr /github/workspace/
+#ls -ltr results
+#ls -ltr /github/workspace/
 
+echo Cleaning up...
+rm results/*.jfr
+rm results/*.no-agent.json results/*.with-agent.json
+
+echo Copying data out of the container to the github workspace
 rsync -avv --progress results/ /github/workspace/results/
