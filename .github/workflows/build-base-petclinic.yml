@@ -13,9 +13,8 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
+          push: true
           file: Docker-petclinic-base
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: breedx-splk/iguanodon/spring-petclinic-base
-          tag_with_ref: true
+#          registry: docker.pkg.github.com
+#          repository: breedx-splk/iguanodon/spring-petclinic-base
+          tags: breedx-splk/iguanodon/spring-petclinic-base:latest
