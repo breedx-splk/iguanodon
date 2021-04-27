@@ -1,4 +1,4 @@
-FROM ghcr.io/breedx-splk/iguanodon/petclinic-base:latest
+FROM ghcr.io/breedx-splk/iguanodon/testrunner-base:latest
 
 COPY bin/ /app/bin/
 COPY k6/ /app/k6/
