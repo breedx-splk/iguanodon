@@ -14,6 +14,11 @@ jobs:
         run: docker-compose up --exit-code-from testrunner
       - name: look for results
         run: ls -l results
+      - name: commit updated results
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: update test result data
+          file_pattern: results/*.csv
       - name: publish-results
         uses: peaceiris/actions-gh-pages@v3
         with:
