@@ -21,7 +21,10 @@ function remapLargeUnits(data){
         return series;
     })
     return data;
+}
 
+function allPrefixes(series) {
+    return [...new Set(series.map(ser => ser.prefix))];
 }
 
 export default class ChartUpdater {
@@ -39,7 +42,8 @@ export default class ChartUpdater {
                 updater({
                     title: `Allocations (${data.unit})`,
                     labels: data.labels,
-                    series: addPrefixAndSuffix(data.series)
+                    series: addPrefixAndSuffix(data.series),
+                    prefixes: allPrefixes(data.series)
                 });
             });
     }
@@ -52,7 +56,8 @@ export default class ChartUpdater {
                 updater({
                     title: `Garbage Collections (sum time in seconds)`,
                     labels: data.labels,
-                    series: addPrefixAndSuffix(data.series)
+                    series: addPrefixAndSuffix(data.series),
+                    prefixes: allPrefixes(data.series)
                 });
             })
     }
@@ -66,7 +71,8 @@ export default class ChartUpdater {
                 updater({
                     title: `Heap usage (${data.unit})`,
                     labels: data.labels,
-                    series: addPrefixAndSuffix(data.series)
+                    series: addPrefixAndSuffix(data.series),
+                    prefixes: allPrefixes(data.series)
                 });
             })
     }
@@ -79,7 +85,8 @@ export default class ChartUpdater {
                 updater({
                     title: `Throughput (time/request)`,
                     labels: data.labels,
-                    series: addPrefixAndSuffix(data.series)
+                    series: addPrefixAndSuffix(data.series),
+                    prefixes: allPrefixes(data.series)
                 });
             })
     }

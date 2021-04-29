@@ -15,7 +15,7 @@ export default class Subselect extends Component {
     render() {
 
         const chartProps = this.props.chartProps;
-        const prefixes = [...new Set(chartProps.series.map(ser => ser.prefix))];
+        const prefixes = chartProps.prefixes;
 
         const radioButtons = prefixes.map(
             prefix => <FormControlLabel value={prefix} control={<Radio/>} label={prefix} key={prefix}/>
