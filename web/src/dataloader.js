@@ -19,6 +19,11 @@ export function fetchThroughput() {
     return doFetchAndConvert(url);
 }
 
+export function fetchHeap() {
+    const url = 'https://breedx-splk.github.io/iguanodon/web/results/heap_used.csv';
+    return doFetchAndConvert(url);
+}
+
 function doFetchAndConvert(url){
     return fetch(url)
         .then(response => response.text())

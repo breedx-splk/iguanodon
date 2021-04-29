@@ -20,10 +20,7 @@ export default class Subselect extends Component {
         const radioButtons = prefixes.map(
             prefix => <FormControlLabel value={prefix} control={<Radio/>} label={prefix} key={prefix}/>
         );
-        console.log(`dogggggg ${this.props.selectedItem}`)
         const selectedItem = this.props.selectedItem === undefined ? prefixes[0] : this.props.selectedItem;
-        // this.props.selectedItem = this.props.selectedItem === undefined ? prefixes[0] : this.props.selectedItem;
-        // const selectedItem = this.props.selectedItem;
         return (
             <FormControl component="fieldset">
                 <FormLabel component="legend">sub series:</FormLabel>

@@ -34,7 +34,7 @@ export default class LeftNavMenu extends Component {
                         </ListItem>
                     </Tooltip>
                     <Tooltip title="Heap usage" placement={"bottom-end"}>
-                        <ListItem button>
+                        <ListItem button onClick={() => updater.showHeapUsage()}>
                             <ListItemIcon>
                                 <HorizontalSplit/>
                             </ListItemIcon>

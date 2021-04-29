@@ -1,5 +1,5 @@
 
-import {fetchAllocations, fetchGarbageCollection, fetchStartupTime, fetchThroughput} from './dataloader'
+import {fetchAllocations, fetchGarbageCollection, fetchHeap, fetchStartupTime, fetchThroughput} from './dataloader'
 
 function addPrefixAndSuffix(series){
     return series.map(ser => {
@@ -7,6 +7,21 @@ function addPrefixAndSuffix(series){
         ser.suffix = ser.name.replace(/^.*-(with-agent|no-agent)$/, '$1');
         return ser;
     });
+}
+
+function remapLargeUnits(data){
+    data.unit = 'MB';
+    let divisor = 1024*1024;
+    if(data.series[0].data[0] > 1024*1024*1024){
+        data.unit = 'GB';
+        divisor = 1024*1024*1024;
+    }
+    data.series = data.series.map(series => {
+        series.data = series.data.map( v => v / divisor)
+        return series;
+    })
+    return data;
+
 }
 
 export default class ChartUpdater {
@@ -19,19 +34,7 @@ export default class ChartUpdater {
         console.log('Showing allocations');
         const updater = this.updateChartProps;
         fetchAllocations()
-            .then(result => {
-                result.unit = 'MB';
-                let divisor = 1024*1024;
-                if(result.series[0].data[0] > 1024*1024*1024){
-                    result.unit = 'GB';
-                    divisor = 1024*1024*1024;
-                }
-                result.series = result.series.map(series => {
-                    series.data = series.data.map( v => v / divisor)
-                    return series;
-                })
-                return result;
-            })
+            .then(remapLargeUnits)
             .then(data => {
                 updater({
                     title: `Allocations (${data.unit})`,
@@ -48,6 +51,20 @@ export default class ChartUpdater {
             .then(data => {
                 updater({
                     title: `Garbage Collections (sum time in seconds)`,
+                    labels: data.labels,
+                    series: addPrefixAndSuffix(data.series)
+                });
+            })
+    }
+
+    showHeapUsage() {
+        console.log('Showing heap usage');
+        const updater = this.updateChartProps;
+        fetchHeap()
+            .then(remapLargeUnits)
+            .then(data => {
+                updater({
+                    title: `Heap usage (${data.unit})`,
                     labels: data.labels,
                     series: addPrefixAndSuffix(data.series)
                 });

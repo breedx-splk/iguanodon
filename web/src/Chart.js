@@ -55,7 +55,6 @@ export default class Chart extends Component {
         if (chartProps?.series?.length <= 2) {
             return <span/>
         }
-        // const selectedItem = chartProps.selectedSubItem || chartProps.series[0].prefix;
         const selectedItem = this.state.selectedSubItem || chartProps.series[0].prefix;
         return <Subselect chartProps={chartProps} radioChanged={x => this.radioSelChanged(x)} selectedItem={selectedItem}/>
     }
@@ -65,14 +64,12 @@ export default class Chart extends Component {
             return chartProps.series;
         }
         if(!this.state.selectedSubItem){
-            if(chartProps?.series?.length){
-                this.setState({
-                    selectedSubItem:  chartProps.series[0].prefix
-                });
+            if(chartProps?.series?.length === 0){
+                console.log("First time in, no data...");
+                return [];
             }
-            return [];
         }
-        const selectedSubItem = this.state.selectedSubItem;
+        const selectedSubItem = this.state.selectedSubItem || chartProps.series[0].prefix;
         return chartProps.series.filter(ser => {
             return ser.prefix === selectedSubItem
         });
