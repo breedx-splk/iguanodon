@@ -1,6 +1,14 @@
 
 import {fetchAllocations, fetchGarbageCollection, fetchStartupTime, fetchThroughput} from './dataloader'
 
+function addPrefixAndSuffix(series){
+    return series.map(ser => {
+        ser.prefix = ser.name.replace(/-with-agent/, '').replace(/-no-agent/, '');
+        ser.suffix = ser.name.replace(/^.*-(with-agent|no-agent)$/, '$1');
+        return ser;
+    });
+}
+
 export default class ChartUpdater {
 
     constructor(updateChartProps) {
@@ -28,7 +36,7 @@ export default class ChartUpdater {
                 updater({
                     title: `Allocations (${data.unit})`,
                     labels: data.labels,
-                    series: data.series
+                    series: addPrefixAndSuffix(data.series)
                 });
             });
     }
@@ -41,7 +49,7 @@ export default class ChartUpdater {
                 updater({
                     title: `Garbage Collections (sum time in seconds)`,
                     labels: data.labels,
-                    series: data.series
+                    series: addPrefixAndSuffix(data.series)
                 });
             })
     }
@@ -54,10 +62,9 @@ export default class ChartUpdater {
                 updater({
                     title: `Throughput (time/request)`,
                     labels: data.labels,
-                    series: data.series
+                    series: addPrefixAndSuffix(data.series)
                 });
             })
-
     }
 
     showStartupTime(){
@@ -68,10 +75,8 @@ export default class ChartUpdater {
                 updater({
                     title: "Startup time",
                     labels: data.labels,
-                    series: data.series
+                    series: addPrefixAndSuffix(data.series)
                 });
             });
     }
-
-
 }

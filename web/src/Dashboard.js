@@ -110,9 +110,7 @@ class Dashboard extends Component {
             drawerOpen: false,
             chartProps: {
                 title: "Choose a category on the left",
-                data: {
-                    cols: ['something', 'another', 'else']
-                }
+                series: []
             }
         }
         this.chartUpdater = new ChartUpdater(cp => this.setState({ chartProps: cp}));
@@ -120,7 +118,6 @@ class Dashboard extends Component {
 
     render() {
         const { classes } = this.props;
-        const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
         return (
             <div className={classes.root}>
                 <CssBaseline/>
