@@ -3,7 +3,7 @@ import Chartist from 'chartist';
 import Title from './Title';
 import Subselect from './Subselect';
 import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
+require('chartist-plugin-legend');
 
 export default class Chart extends Component {
 
@@ -17,20 +17,26 @@ export default class Chart extends Component {
         const title = this.props.chartProps.title;
         const chartProps = this.props.chartProps;
 
-        // console.log(`chart sees: `)
-        // console.log(this.props.chartProps);
-
         const subsel = this.buildSubsel()
         const seriesData = this.buildSeriesData(chartProps);
         const data = {
             labels: chartProps.labels,
             series: seriesData
         };
+        const legendContainer = document.getElementById('legend')
+        if(legendContainer) legendContainer.innerHTML = ""; // hacky hack
         const options = {
             low: 0,
             lineSmooth: Chartist.Interpolation.cardinal({
                 tension: 0.4
-            })
+            }),
+            position: 'bottom',
+            fullWidth: true,
+            plugins: [
+                Chartist.plugins.legend({
+                    position: legendContainer
+                })
+            ]
         }
         if(data.labels){
             const chart = new Chartist.Line('#chart', data, options);

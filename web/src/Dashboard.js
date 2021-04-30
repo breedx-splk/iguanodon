@@ -165,9 +165,11 @@ class Dashboard extends Component {
                     <div className={classes.appBarSpacer}/>
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={3}>
-                            {/* Chart */}
-                            <Grid item xs={12} md={10} lg={10} wid>
+                            <Grid item xs={10} md={10} lg={10}>
                                 <Chart chartProps={this.state.chartProps}/>
+                            </Grid>
+                            <Grid item xs={2} md={2} lg={2}>
+                                <div id="legend"/>
                             </Grid>
                         </Grid>
                     </Container>

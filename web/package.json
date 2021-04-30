@@ -12,6 +12,7 @@
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.11.2",
     "chartist": "^0.11.4",
+    "chartist-plugin-legend": "^0.6.2",
     "clsx": "latest",
     "react": "latest",
     "react-dom": "latest",

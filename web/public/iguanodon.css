@@ -17,6 +17,18 @@
     stroke-width: 5px;
 }
 
+.ct-legend {
+    font-size: small;
+}
+
+.ct-legend > .ct-series-0 {
+    color: #2a324b;
+}
+
+.ct-legend > .ct-series-1 {
+    color: #f05b4f;
+}
+
 svg.ct-chart-bar, svg.ct-chart-line{
     overflow: visible;
 }
