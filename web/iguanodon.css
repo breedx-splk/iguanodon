@@ -1,0 +1,43 @@
+.ct-series-a .ct-line {
+    stroke: #2a324b;
+    stroke-width: 2px;
+}
+
+.ct-series-a .ct-point {
+    stroke: #2a324b;
+    stroke-width: 5px;
+}
+
+.ct-series-b .ct-line {
+    stroke: #f05b4f;
+    stroke-width: 2px;
+}
+.ct-series-b .ct-point {
+    stroke: #f05b4f;
+    stroke-width: 5px;
+}
+
+.ct-legend {
+    font-size: small;
+}
+
+.ct-legend > .ct-series-0 {
+    color: #2a324b;
+}
+
+.ct-legend > .ct-series-1 {
+    color: #f05b4f;
+}
+
+svg.ct-chart-bar, svg.ct-chart-line{
+    overflow: visible;
+}
+.ct-label.ct-label.ct-horizontal.ct-end {
+    position: relative;
+    justify-content: flex-end;
+    text-align: right;
+    transform-origin: 100% 0;
+    transform: translate(-100%) rotate(-45deg);
+    white-space:nowrap;
+    font-size: x-small;
+}
