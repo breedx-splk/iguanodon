@@ -18,6 +18,7 @@
     "react-dom": "latest",
     "react-scripts": "latest"
   },
+  "homepage": "https://breedx-splk.github.io/iguanodon/web/",
   "browserslist": {
     "production": [
       ">0.2%",
