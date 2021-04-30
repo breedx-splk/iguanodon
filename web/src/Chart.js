@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import Chartist from 'chartist';
 import Title from './Title';
 import Subselect from './Subselect';
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
 export default class Chart extends Component {
 
@@ -35,12 +37,12 @@ export default class Chart extends Component {
         }
 
         return (
-            <React.Fragment>
+            <Paper>
                 <Title>{title}</Title>
                 {subsel}
                 <div id='chart' className="ct-chart ct-perfect-fourth">
                 </div>
-            </React.Fragment>
+            </Paper>
         );
     }
 

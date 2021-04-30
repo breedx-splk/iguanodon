@@ -1,10 +1,10 @@
 .ct-series-a .ct-line {
-    stroke: red;
+    stroke: #2a324b;
     stroke-width: 2px;
 }
 
 .ct-series-a .ct-point {
-    stroke: red;
+    stroke: #2a324b;
     stroke-width: 5px;
 }
 
@@ -17,38 +17,15 @@
     stroke-width: 5px;
 }
 
-.ct-series-c .ct-line {
-    stroke: #f05b4f;
-    stroke-width: 2px;
+svg.ct-chart-bar, svg.ct-chart-line{
+    overflow: visible;
 }
-.ct-series-c .ct-point {
-    stroke: #f05b4f;
-    stroke-width: 5px;
-}
-
-.ct-series-d .ct-line {
-    stroke: #2a324b;
-    stroke-width: 2px;
-}
-.ct-series-d .ct-point {
-    stroke: #2a324b;
-    stroke-width: 5px;
-}
-
-.ct-series-e .ct-line {
-    stroke: #2a324b;
-    stroke-width: 2px;
-}
-.ct-series-e .ct-point {
-    stroke: #2a324b;
-    stroke-width: 5px;
-}
-
-.ct-series-f .ct-line {
-    stroke: #2a324b;
-    stroke-width: 2px;
-}
-.ct-series-f .ct-point {
-    stroke: #2a324b;
-    stroke-width: 5px;
+.ct-label.ct-label.ct-horizontal.ct-end {
+    position: relative;
+    justify-content: flex-end;
+    text-align: right;
+    transform-origin: 100% 0;
+    transform: translate(-100%) rotate(-45deg);
+    white-space:nowrap;
+    font-size: x-small;
 }

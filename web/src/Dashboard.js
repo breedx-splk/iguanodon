@@ -166,10 +166,8 @@ class Dashboard extends Component {
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={3}>
                             {/* Chart */}
-                            <Grid item xs={12} md={8} lg={9}>
-                                <Paper>
-                                    <Chart chartProps={this.state.chartProps}/>
-                                </Paper>
+                            <Grid item xs={12} md={10} lg={10} wid>
+                                <Chart chartProps={this.state.chartProps}/>
                             </Grid>
                         </Grid>
                     </Container>
