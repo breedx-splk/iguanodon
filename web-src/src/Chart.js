@@ -3,6 +3,7 @@ import Chartist from 'chartist';
 import Title from './Title';
 import Subselect from './Subselect';
 import Paper from "@material-ui/core/Paper";
+import regression from 'regression';
 require('chartist-plugin-legend');
 
 export default class Chart extends Component {
@@ -19,9 +20,10 @@ export default class Chart extends Component {
 
         const subsel = this.buildSubsel()
         const seriesData = this.buildSeriesData(chartProps);
+        const seriesWithTrends = this.buildTrends(seriesData);
         const data = {
             labels: chartProps.labels,
-            series: seriesData
+            series: seriesWithTrends
         };
         const legendContainer = document.getElementById('legend')
         if(legendContainer) legendContainer.innerHTML = ""; // hacky hack
@@ -87,7 +89,33 @@ export default class Chart extends Component {
         }
         const selectedSubItem = this.chooseSelectedItem();
         return chartProps.series.filter(ser => {
-            return ser.prefix === selectedSubItem
+            return ser.prefix === selectedSubItem;
         });
+    }
+
+    buildTrends(seriesData){
+        if(seriesData?.length !== 2) {
+            return seriesData;
+        }
+        const r1 = this.buildRegression(seriesData, 0);
+        const r2 = this.buildRegression(seriesData, 1);
+        const result = [
+            seriesData[0],
+            {name: `${seriesData[0].name}-trend`, data: r1},
+            seriesData[1],
+            {name: `${seriesData[1].name}-trend`, data: r2}
+        ];
+        console.log(result);
+        return result;
+    }
+
+    buildRegression(seriesData, index){
+        let series = seriesData[index].data;
+        const r = regression.linear(series.map((item, i) => [i,item]));
+        console.log(r);
+        const newSeries = new Array(series.length);
+        newSeries[0] = r.points[0][1];
+        newSeries[series.length-1] = r.points[series.length-1][1];//(series.length * r[0]) + r[1];
+        return newSeries;
     }
 }

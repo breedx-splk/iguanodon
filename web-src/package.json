@@ -16,7 +16,8 @@
     "clsx": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-scripts": "latest"
+    "react-scripts": "latest",
+    "regression": "^2.0.1"
   },
   "homepage": "https://breedx-splk.github.io/iguanodon/web/",
   "browserslist": {

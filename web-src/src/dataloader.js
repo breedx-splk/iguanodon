@@ -39,7 +39,7 @@ function bodyToChartProps(body){
         .map(index => [index, lineCols.map(c => c[index + 1])])
         .map(series => ({
             name: fields[series[0]+1],
-            data: series[1]
+            data: series[1].map(parseFloat)
         }));
     return {
         labels: labels,
