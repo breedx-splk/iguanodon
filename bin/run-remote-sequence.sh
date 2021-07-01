@@ -54,7 +54,7 @@ WITH_HEAP_MAX=$(jfr print --json --events jdk.GCHeapSummary with-agent.jfr | jq 
 NO_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate no-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
 WITH_TS_RATE=$(jfr print --json --events jdk.ThreadContextSwitchRate with-agent.jfr | jq '[.recording.events | .[].values.switchRate ] | max')
 
-echo "${TS},${NO_ITER_AVG},${NO_ITER_P95},${NO_HTTP_AVG},${NO_HTTP_P95},${WITH_ITER_AVG},${WITH_ITER_P95},${WITH_HTTP_AVG},${WITH_HTTP_P95}" >> results/throughput.csv
+echo "${TS},${NO_ITER_AVG},${NO_ITER_P95},${NO_HTTP_AVG},${NO_HTTP_P95},${WITH_ITER_AVG},${WITH_ITER_P95},${WITH_HTTP_AVG},${WITH_HTTP_P95}" >> results/response_time.csv
 echo "${TS},${NO_ALLOCS},${WITH_ALLOCS}" >> results/allocations.csv
 echo "${TS},${GC_WITHOUT},${GC_WITH}" >> results/garbage_collection.csv
 echo "${TS},${NO_HEAP_MIN},${NO_HEAP_MAX},${WITH_HEAP_MIN},${WITH_HEAP_MAX}" >> results/heap_used.csv
