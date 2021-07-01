@@ -10,7 +10,7 @@ We run a [sample app](https://github.com/spring-petclinic/spring-petclinic-rest)
 with and without the agent and perform some measurements. Goals ultimately
 include the desire to compare overhead of:
 
-* transaction throughput (TPM) - average and P95
+* response time (time per request) - average and P95
 * GC pauses (number and total duration)
 * memory allocation rate
 

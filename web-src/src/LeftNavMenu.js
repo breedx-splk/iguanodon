@@ -41,12 +41,12 @@ export default class LeftNavMenu extends Component {
                             <ListItemText primary="Heap usage"/>
                         </ListItem>
                     </Tooltip>
-                    <Tooltip title="Throughput" placement={"bottom-end"}>
-                        <ListItem button onClick={() => updater.showThroughput()}>
+                    <Tooltip title="Response Time" placement={"bottom-end"}>
+                        <ListItem button onClick={() => updater.showResponseTime()}>
                             <ListItemIcon>
                                 <LayersIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="Throughput"/>
+                            <ListItemText primary="Response time"/>
                         </ListItem>
                     </Tooltip>
                     <Tooltip title="Startup time" placement={"bottom-end"}>

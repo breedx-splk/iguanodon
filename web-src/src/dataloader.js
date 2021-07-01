@@ -14,8 +14,8 @@ export function fetchStartupTime() {
     return doFetchAndConvert(url);
 }
 
-export function fetchThroughput() {
-    const url = 'https://breedx-splk.github.io/iguanodon/web/results/throughput.csv';
+export function fetchResponseTime() {
+    const url = 'https://breedx-splk.github.io/iguanodon/web/results/response_time.csv';
     return doFetchAndConvert(url);
 }
 

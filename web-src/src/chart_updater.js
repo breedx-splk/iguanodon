@@ -1,5 +1,5 @@
 
-import {fetchAllocations, fetchGarbageCollection, fetchHeap, fetchStartupTime, fetchThroughput} from './dataloader'
+import {fetchAllocations, fetchGarbageCollection, fetchHeap, fetchStartupTime, fetchResponseTime} from './dataloader'
 
 function addPrefixAndSuffix(series){
     return series.map(ser => {
@@ -77,13 +77,13 @@ export default class ChartUpdater {
             })
     }
 
-    showThroughput() {
-        console.log('Showing throughput');
+    showResponseTime() {
+        console.log('Showing response time');
         const updater = this.updateChartProps;
-        fetchThroughput()
+        fetchResponseTime()
             .then(data => {
                 updater({
-                    title: `Throughput (time/request)`,
+                    title: `Response Time (time/request)`,
                     labels: data.labels,
                     series: addPrefixAndSuffix(data.series),
                     prefixes: allPrefixes(data.series)
