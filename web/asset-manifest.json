@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/iguanodon/web/static/js/main.36bd1794.chunk.js",
-    "main.js.map": "/iguanodon/web/static/js/main.36bd1794.chunk.js.map",
+    "main.js": "/iguanodon/web/static/js/main.520725ce.chunk.js",
+    "main.js.map": "/iguanodon/web/static/js/main.520725ce.chunk.js.map",
     "runtime-main.js": "/iguanodon/web/static/js/runtime-main.dbafa8e4.js",
     "runtime-main.js.map": "/iguanodon/web/static/js/runtime-main.dbafa8e4.js.map",
     "static/js/2.81daf5a0.chunk.js": "/iguanodon/web/static/js/2.81daf5a0.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.dbafa8e4.js",
     "static/js/2.81daf5a0.chunk.js",
-    "static/js/main.36bd1794.chunk.js"
+    "static/js/main.520725ce.chunk.js"
   ]
 }
