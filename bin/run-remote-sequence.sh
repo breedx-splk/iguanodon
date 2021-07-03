@@ -6,7 +6,7 @@ set -e
 
 TS=$(date +%Y%m%d%H%M%S)
 
-/app/bin/run-test-remote.sh --no-agent
+/app/bin/run-test-remote.sh --agent none
 
 echo Fetching results...
 scp -o StrictHostKeyChecking=no remote@petclinic:/app/no-agent.jfr no-agent.jfr

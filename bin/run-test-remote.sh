@@ -14,10 +14,9 @@ function usage {
   echo
   echo "$0 <options>"
   echo
-  echo "   --no-agent              : run without the agent"
-  echo "   --agent <otel|splunk>   : run with one of the agents"
-  echo "   --users <vusers>        : use this many vusers (default=5)"
-  echo "   --iterations <num>      : run this many iterations (default=500)"
+  echo "   --agent <none|otel|splunk> : run with one of the agents"
+  echo "   --users <vusers>           : use this many vusers (default=5)"
+  echo "   --iterations <num>         : run this many iterations (default=500)"
   echo
   exit 1
 }
@@ -26,14 +25,9 @@ while [[ $# -gt 0 ]] ; do
   key="$1"
   case $key in
     -a|--agent)
-      TEST_TYPE="with-agent"
       AGENT=$2
       shift # past argument
       shift # past value
-      ;;
-    -n|--no-agent)
-      TEST_TYPE="no-agent"
-      shift # past argument
       ;;
     -u|--users)
       VUSERS=$2
@@ -51,13 +45,15 @@ while [[ $# -gt 0 ]] ; do
   esac
 done
 
-if [ "$TEST_TYPE" == "no-agent" ] ; then
-  SCRIPT="/app/bin/run-app-${TEST_TYPE}.sh"
-elif [ "$TEST_TYPE" == "with-agent" ]; then
-  SCRIPT="/app/bin/run-app-${TEST_TYPE}.sh --agent ${AGENT} --endpoint http://collector:4317"
-else
+if [ "$AGENT" == "" ] ; then
   usage
   exit 1
+elif [ "$AGENT" == "none" ] ; then
+  TEST_TYPE="no-agent"
+  SCRIPT="/app/bin/run-app.sh --agent none"
+else
+  TEST_TYPE="with-agent"
+  SCRIPT="/app/bin/run-app.sh --agent ${AGENT} --endpoint http://collector:4317"
 fi
 
 if [ ! -d "${LOGS}" ] ; then
@@ -74,8 +70,8 @@ SECONDS=0
 echo 'Waiting for app to be ready...'
 
 while [ "1" == "1" ] ; do
-  curl -qs -I http://petclinic:${PORT}/petclinic/swagger-ui.html > /dev/null
-  if [ "$?" == "0" ] ; then
+  STATUS=$(curl -qs http://petclinic:${PORT}/petclinic/actuator/health | jq -r .status)
+  if [ "$STATUS" == "UP" ] ; then
     break
   fi
   echo 'Waiting for app to be ready...'
