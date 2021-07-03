@@ -19,6 +19,8 @@ services:
     ports:
       - "2022:22"
       - "9966:9966"
+    depends_on:
+      - collector
 
   testrunner:
     build:
@@ -27,4 +29,5 @@ services:
     volumes:
       - .:/github/workspace
     command: ["/app/bin/run-remote-sequence.sh"]
-
+    depends_on:
+      - petclinic
